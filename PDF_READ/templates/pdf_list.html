@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的pdf</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+
+    .pdflists{
+        width: 80%;
+        margin: 0 auto;
+
+    }
+    .title{
+        width: 100%;
+        height: 50px;
+         background: rgba(187, 187, 187, 0.16);
+        margin-bottom: 20px;
+        position: relative;
+}
+    .tt{
+        width: 20%;
+        height: 100%;
+        line-height: 50px;
+        float: left;
+    }
+    .title span {
+        display: block;
+        width: 50px;
+        height: 50px;
+        border-radius: 100px;
+        background: rgba(47, 196, 218, 0.22);
+        float: right;
+        line-height: 50px;
+        text-align: center;
+    }
+    body{
+        background: white;
+    }
+    .ppp{
+        border-radius: 20px;
+        width: 100%;
+        height: 50px;
+        margin: 10px;
+        overflow: hidden;
+    }
+    .pdf{
+        width: 80%;
+        height: 100%;
+        background: rgba(177, 172, 183, 0.41);
+        float: left;
+        line-height: 50px;
+        text-align: center;
+
+    }
+    .span{
+        width: 20%;
+        height: 50px;
+        background: red;
+        float: right;
+        line-height: 50px;
+        text-align: center;
+    }
+
+    a{
+        text-decoration: none;
+    }
+    .down{
+        width: 20%;
+        text-align: center;
+        background: rgba(177, 172, 183, 0.08);
+        position: absolute;
+        right: 0;
+        top: 50px;
+        display: none;
+    }
+    .pdf:hover{
+        background: rgba(177, 172, 183, 0.19);
+    }
+
+
+</style>
+<body>
+<div class="title">
+    <div class="tt">PDF列表</div>
+    <span id="downmy">P</span>
+</div>
+<div class="down" id="down">
+    {% if name %}
+        你好， <a href=""><strong>{{ role }}:{{ name }}</strong></a>
+        <div><a href="/Pdf_read/login/">退出登录</a></div>
+        {% elif not name%}
+        你好， <a href="/Pdf_read/login/"><strong>请登录</strong></a>
+    {% endif %}
+
+</div>
+<div class="pdflists">
+    {%for i in pdflist%}
+        <div class="ppp">
+         <div class="pdf" id="{{ i }}" onclick="linkto(this)">{{ i }}</div>
+            <div class="span" id='{{ i }}'onclick="download(this)">下载</div>
+        </div>
+{% endfor %}
+</div>
+</body>
+<script>
+    window.onload=function(){
+        var downmy=document.getElementById('downmy')
+        var down=document.getElementById('down')
+        downmy.addEventListener('click',function () {
+            console.log(down.style.display)
+            if (down.style.display=='none' || down.style.display=='') {
+                down.style.display='block'
+            }else {
+                down.style.display='none'
+            }
+
+        })
+        linkto=function (e) {
+        window.open('/Pdf_read/pdfread/?pdfname='+e.id)
+    }
+    download=function(e){
+
+         $.ajaxSetup({ data:{csrfmiddlewaretoken:'{{ csrf_token }}'}, }); //csrf
+        $.ajax({
+            type:'post',
+            url:"/Pdf_read/pdfread/",
+            data:{
+                pdfname:e.id
+            },
+            success:function(res){
+                if (res.role=='vip'){
+                    let a = document.createElement('a');
+                    var event = new MouseEvent('click')
+                    a.href = '/static/'+res.state;
+                    a.click();
+                    a.dispatchEvent(event)
+                }
+                else if (res.role=='user'){
+                    alert('您是普通用户，没有权限下载本文件哦！')
+                }
+                else{
+                    alert('您还没有登录呢！')
+                    window.location.href='/Pdf_read/login/'
+                }
+
+            }
+
+        })
+    }
+
+    }
+
+
+
+
+
+
+
+</script>
+</html>

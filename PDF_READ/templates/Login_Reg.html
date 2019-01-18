@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<style>
+    *{margin: 0;
+    padding: 0;}
+
+    li{
+        list-style-type: none;
+    }
+    .body{
+        width: 100%;
+        height: 700px;
+        background: beige;
+    }
+    .login_reg{
+        position: fixed;
+        top: 200px;
+        left: 35%;
+        width: 30%;
+        height: 300px;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+    .title{
+        width: 100%;
+        height: 50px;
+        position: relative;
+        z-index: 999;
+    }
+    .title ul {
+        width: 100%;
+        height: 100%;
+    }
+    .title ul li {
+        float: left;
+        width: 50%;
+        height: 100%;
+        background: rgba(177, 172, 183, 0.19);
+        line-height: 50px;
+        text-align: center;
+    }
+
+    .login{
+        position: absolute;
+        width: 100%;
+        height: 250px;
+        background: white;
+        -moz-transition: width 1s;	/* Firefox 4 */
+        -webkit-transition: width 1s;
+    }
+    .reg{
+        margin-top: 10px;
+        width: 100%;
+        height: 250px;
+        background: white;
+ }
+    .NamePassword{
+        width: 96%;
+        height: 50px;
+        margin: 2%;
+        margin-bottom: 5%;
+    }
+    .NamePassword span{
+        display: block;
+        float: left;
+        width: 16%;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+    }
+    .NamePassword input{
+        width: 76%;
+        height: 30px;
+        margin: 2%;
+        border: 1px solid #ccc;
+        background: none;
+        border-radius: 10px;
+
+    }
+    #loginsend{
+        width: 96%;
+        height: 40px;
+        background: rgba(33, 130, 255, 0.52);
+        border-radius: 10px;
+        border:none;
+        margin: 2% ;
+    }
+    .regs{
+        width: 96%;
+        height: 30px;
+        margin: 1px;
+        margin-bottom: 2px;
+
+    }
+    .regs span{
+        display: block;
+        float: left;
+        width: 16%;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+    }
+    .regs input{
+        width: 76%;
+        height: 25px;
+        margin: 1px;
+        border: 1px solid #ccc;
+        background: none;
+        border-radius: 10px;
+        float: right;
+
+    }
+    #getcode {
+        width: 50%;
+        height: 30px;
+        background: rgba(30, 255, 10, 0.39);
+        border-radius: 10px;
+        border:none;
+        margin: 2px 25% ;
+    }
+    #sendreg{
+         width: 50%;
+        height: 30px;
+        background: rgba(30, 255, 10, 0.39);
+        border-radius: 10px;
+        border:none;
+        margin: 2px 25% ;
+    }
+    #getcodeshow{
+        display: none;
+    }
+   .foter{
+       width: 100%;
+       height: 30px;
+       background: white;
+       text-align: center;
+       line-height: 30px;
+
+   }
+
+</style>
+<body>
+<div class="body">
+    <div class="login_reg">
+       <div class="title">
+           <ul>
+               <li id="logintab" onclick="tab(this)" style="background: white">登录</li>
+               <li id="regtab" onclick="tab(this)">注册</li>
+           </ul>
+       </div>
+      <div class="login" id="login">
+           <div class="NamePassword">
+               <span>用户名</span>
+               <input type="text" id="names" placeholder="用户名/emil">
+           </div>
+          <div class="NamePassword" >
+               <span>密码</span>
+               <input type="password" id="password" placeholder="密码">
+           </div>
+          <button id="loginsend">登录</button>
+          <a href="" style="float: right;margin-right: 10px">忘记密码</a>
+      </div>
+
+        <div class="reg" id="reg">
+          <div class="regs">
+               <span>用户名</span>
+               <input type="text" id="regname" placeholder="请输入用户名">
+           </div>
+            <div class="regs">
+               <span>邮箱</span>
+               <input type="text" id="emil" placeholder="请输入邮箱地址">
+           </div>
+            <button id="getcode">获取验证码</button>
+            <div id="getcodeshow">
+                <div class="regs">
+                   <span>验证码</span>
+                   <input type="text" id="code" placeholder="请输入邮箱验证码">
+               </div>
+                <div class="regs">
+                   <span>密码</span>
+                   <input type="password" id="regpassword1" placeholder="密码要求数字和英文组成且不低于8位">
+               </div>
+                <div class="regs">
+                   <span>密码</span>
+                   <input type="password" id="regpassword2" placeholder="请再次输入密码">
+               </div>
+                <button id="sendreg">注册</button>
+            </div>
+      </div>
+
+    </div>
+</div>
+<div class="foter">
+    @copyright|make in dada
+</div>
+
+</body>
+
+
+<script>
+        var reemil=/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;  //emil和password的正则表达式
+		var repassword=/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/;
+
+        var logintab=document.getElementById('logintab') //登录和注册的切换
+        var regtab=document.getElementById('regtab')
+        var login=document.getElementById('login')
+
+        var getcode=document.getElementById('getcode') //注册
+        var getcodeshow=document.getElementById('getcodeshow')
+        var sendreg=document.getElementById('sendreg')
+        var regname=document.getElementById('regname')
+        var emil =document.getElementById('emil')
+        var code=document.getElementById('code')
+        var password1=document.getElementById('regpassword1')
+        var password2=document.getElementById('regpassword2')
+        var returncode=null
+
+        var loginsend=document.getElementById('loginsend')//登录
+        var names=document.getElementById('names')
+        var password=document.getElementById('password')
+
+
+
+
+        //切换
+        var tab=function (e) {
+            console.log(e.id)
+            if (e.id=='logintab'){
+                logintab.style.background='white'
+                regtab.style.background=''
+                if (login.style.top=='-250px'){
+                    login.style.top=''
+                }
+            } else {
+                regtab.style.background='white'
+                logintab.style.background=''
+                login.style.top='-250px'
+
+            }
+        };
+        //获取验证码
+        getcode.addEventListener('click',function () {
+            var  send =true
+            if (regname.value==''){
+                regname.style.border='1px solid red'
+                send=false
+            }else {
+                regname.style.border='1px solid #ccc'
+            }
+            if (!reemil.test(emil.value)){
+                emil.style.border='1px solid red'
+                send=false
+            }else{
+                emil.style.border='1px solid #ccc'
+            }
+            if (send){
+                $.ajax({
+                   type:'get',
+                    url:'/Pdf_read/sendemil/',
+                    async:true,
+                    data:{
+                       emil:emil.value
+                    },
+                    success:function (res) {
+                        alert(res.state)
+                        console.log(res.code)
+                        returncode=res.code
+                        getcodeshow.style.display='block'
+                        getcode.disabled=true;
+                        var i =60
+                        var timeout=setInterval(function () {
+                            getcode.innerText='获取验证码('+i+'s)'
+                            i--
+                            if (i==0){
+                                getcode.innerText='获取验证码'
+                                getcode.disabled=false;
+                                clearInterval(timeout)
+                            }
+                        },1000)
+                    }
+                })
+
+            }
+
+        })
+        //注册
+        sendreg.addEventListener('click',function () {
+            if (returncode==code.value) {
+                if (repassword.test(password1.value) & password1.value==password2.value){
+                    $.ajaxSetup({ data:{csrfmiddlewaretoken:'{{ csrf_token }}'}, }); //csrf
+                    $.ajax({
+                        type:'post',
+                        url:'/Pdf_read/reg/',
+                        async:true,
+                        data:{
+                            name:regname.value,
+                            password:password1.value,
+                            emil:emil.value
+                        },
+                        success:function (res) {
+                            alert(res.state)
+                        }
+
+                    })
+                }
+                else {
+                    password1.style.border='1px solid red'
+                    password2.style.border='1px solid red'
+                }
+            }
+            else {
+                code.style.border='1px solid red'
+            }
+
+        })
+
+      loginsend.addEventListener('click',function () {
+          if (names.value!=''){
+              if (repassword.test(password.value)) {
+                  $.ajaxSetup({ data:{csrfmiddlewaretoken:'{{ csrf_token }}'}, }); //csrf
+                  $.ajax({
+                      type:'post',
+                      url:'/Pdf_read/login/',
+                      async:true,
+                      data:{
+                          name:names.value,
+                          password:password.value,
+                      },
+                      success:function (e) {
+                          alert(e.state)
+                          if (e.state=='登录成功') {
+                            window.location.href="/Pdf_read/pdflist/";
+                          }
+                      }
+                  })
+              }
+              else {
+                  password.style.border='1px solid red'
+              }
+          } else{
+              name.style.border='1px solid red'
+          }
+      })
+
+</script>
+</html>

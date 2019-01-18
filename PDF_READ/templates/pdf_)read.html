@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+	</head>
+    <style>
+        .nodown{
+            width: 100%;
+            height: 55px;
+            position: fixed;
+            top: 0;
+            z-index: 999;
+            background: white;
+        }
+        .pdftitle{
+            line-height: 55px;
+            width: 33%;
+            float: left;
+        }
+        .nodown button{
+            width: 10%;
+            height: 35px;
+            margin: 10px;
+            float: right;
+            border-radius: 10px;
+            background: aqua;
+            border: 0;
+        }
+
+
+    </style>
+	<body >
+
+    <div class="nodown">
+        <div class="pdftitle">
+             {{ pdfname }}
+        </div>
+    </div>
+
+{% load staticfiles %}
+<embed width="100%" height="700" src="/static/{{ pdfname}}"></embed>
+
+	</body >
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script>
+    document.oncontextmenu=new Function("return false");
+
+    document.oncontextmenu=function(e) {
+        location.reload(true)
+    }
+
+
+    </script>
+
+
+</html>
